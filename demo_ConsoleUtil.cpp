@@ -1,6 +1,6 @@
 #include "ConsoleUtil.hpp"
 
-// D:\msys\ucrt64\bin\g++.exe playground.cpp classes.cpp icons\app.res -o executables\playground.exe
+// YOURPATH\ucrt64\bin\g++.exe demo_ConsoleUtil.cpp -o demo_ConsoleUtil.exe
 
 int main() {  
 
