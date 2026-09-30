@@ -14,7 +14,7 @@ private:
     const int max_pixel_value = 255;
 
     // standard constants of trigonometric functions
-    // a * std::func ( b * x + c * pi ) + d
+    // a * std::func ( b * (x + c)) + d
     const double a = 0.5;
     const double b = pi * 2;
     const double c_offset_red = 0.45 * pi * 2;
@@ -22,7 +22,29 @@ private:
     const double c_offset_blu = 0.9 * pi * 2;
     const double d = 1 - a;
 
-    void 
+    // function that takes a bottom, a top and a current value and outputs RGB value for that part of the gradient
+    // hardcoded to go from red to green.
+    // example syntax: printf("\x1B[38;2;R;G;Bm"); 
+    std::array<int, 3> 
+    red2greenGradient(int bottom, int top, double progress) 
+    {
+        
+        std::array<int, 3> RGB;
+        double x = (progress - bottom) / double(top - bottom) * 2 * pi;
+
+        // a * std::func ( b * (x - c) ) + d
+        int red = int((a * std::sin(b * (x - c_offset_red)) + d) * max_pixel_value);
+        int grn = int((a * std::sin(b * (x - c_offset_grn)) + d) * max_pixel_value);
+        int blu = 0; //int((a * std::sin(b * (x - c_offset_blu)) + d) * max_pixel_value);
+
+        RGB = {red, grn, blu};
+        return RGB;
+    };
+
+
+public:
+
+   void 
     printColored(int color, const char& text)
     {
         std::cout << "\x1B[" << color << "m" // escape sequence for setting text color
@@ -92,8 +114,6 @@ private:
         std::cout << "\x1b[0m";
     };
 
-public:
-
     void pause(double duration) 
     {
         double difference = 0.0;
@@ -105,25 +125,6 @@ public:
         auto current = std::chrono::steady_clock::now();
         difference = std::chrono::duration<double>(current - start).count();
         };
-    };
-
-    // function that takes a bottom, a top and a current value and outputs RGB value for that part of the rainbow
-    // example syntax: printf("\x1B[38;2;R;G;Bm"); 
-    std::array<int, 3> 
-    green2redGradient(int bottom, int top, double progress) 
-    {
-        
-        std::array<int, 3> RGB;
-        double x = (progress - bottom) / double(top - bottom) * 2 * pi;
-
-        // a * std::func ( b * x + c * pi ) + d
-        int red = int((a * std::sin(b * (x - c_offset_red)) + d) * max_pixel_value);
-        int grn = int((a * std::sin(b * (x - c_offset_grn)) + d) * max_pixel_value);
-        int blu = 0; //int((a * std::sin(b * (x - c_offset_blu)) + d) * max_pixel_value);
-
-        RGB = {red, grn, blu};
-        //std::cout << red << "|" << grn << "|" << blu << "\n";
-        return RGB;
     };
 
     void 
@@ -174,7 +175,7 @@ public:
         
         if(do_color) 
         {
-            RGB = green2redGradient(bottom, top, progress_in_rads);
+            RGB = red2greenGradient(bottom, top, progress_in_rads);
         };
 
         int full_chars = static_cast<int>(bar_progress);
