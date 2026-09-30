@@ -1,6 +1,6 @@
 # console utilities
 
-A simple console utility (tested on VSCode windows 11, using ucrt64) to draw various things on a terminal.
+A simple console utility (tested on VSCode windows 11, using ucrt64) to draw various things on a terminal. Written for C++ v>=20.
 The console utilities class contains all necessary functions and libraries to work as intended.
 
 Features include:
